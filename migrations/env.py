@@ -4,7 +4,8 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from alembic import context
 from core.config import settings
 from core.database import Base
-import models  # noqa — registers all models with Base.metadata
+from models.users import Users
+from models.telemetry import Telemetry
 
 config = context.config
 
