@@ -5,6 +5,7 @@ from core.auth import get_current_user
 from schemas.telemetry import TelemetryPayload
 from services.postTelemetry import postTelemetry
 from services.getTelemetryJson import getTelemetryJson
+from services.testTelemetry import TEST_TELEMETRY
 
 router = APIRouter()
 
@@ -19,6 +20,11 @@ router = APIRouter()
 #   "powerConsumption": { "current": 30, "pastHour": [...], "pastDay": [...], "pastWeek": [...], "allTime": 27.1 },
 #   "netPower":         { "current": 15, "pastHour": [...], "pastDay": [...], "pastWeek": [...], "allTime": 11.1 }
 # }
+@router.get("/test")
+async def get_test_telemetry():
+    return TEST_TELEMETRY
+
+
 @router.get("")
 async def get_telemetry(
     db: AsyncSession = Depends(get_db),
