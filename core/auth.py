@@ -18,7 +18,7 @@ async def get_current_user(request: Request):
     # verify token with clerk
     request_state = clerk.authenticate_request(
         httpx_request,
-        auth_options=AuthenticateRequestOptions(
+        AuthenticateRequestOptions(
             authorized_parties=[settings.AUTHORIZED_PARTY]
         ),
     )
