@@ -6,6 +6,20 @@ from retry_requests import retry
 
 router = APIRouter()
 
+# GET /weather?lat=52.52&long=13.41
+# Returns:
+# {
+#   "forecast": [
+#     {
+#       "time": 1743811200,                  (unix timestamp, one entry per hour, 24 total)
+#       "cloud_cover_pct": 42,
+#       "precip_probability_pct": 15,
+#     },
+#     ...
+#   ],
+#   "sunrise": 1743826800,                   (unix timestamp)
+#   "sunset":  1743873600                    (unix timestamp)
+# }
 # TODO: add user authentication later after testing before deployment
 @router.get("")
 async def get_weather(
