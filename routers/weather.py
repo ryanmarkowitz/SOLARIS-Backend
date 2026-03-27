@@ -1,4 +1,3 @@
-from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException
 from core.auth import get_current_user
 import openmeteo_requests
@@ -25,7 +24,8 @@ async def get_weather(
         "latitude": lat,
         "longitude": long,
         "hourly": ["precipitation_probability", "cloud_cover"],
-        "forcast_days": 1
+        "daily": ["sunrise", "sunset"],
+        "forecast_days": 1
     }
 
     try:
@@ -44,15 +44,21 @@ async def get_weather(
         start = hourly.Time()
         interval = hourly.Interval()
 
+        # get sunrise / sunset times
+        daily = response.Daily()
+        sunrise = int(daily.Variables(0).ValuesAsNumpy()[0])
+        sunset = int(daily.Variables(1).ValuesAsNumpy()[0]) 
+
         forecast = []
         for i in range(24):
             timestamp = start + (i * interval)
             forecast.append({
-                "time": datetime.fromtimestamp(timestamp, tz=timezone.utc).isoformat(),
+                "time": timestamp,
                 "cloud_cover_pct": int(hourly_cloud_cover[i]),
                 "precip_probability_pct": int(hourly_per_prob[i]),
             })
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to parse weather response: {str(e)}")
 
-    return {"forecast": forecast}
+    return {"forecast": forecast, "sunrise": sunrise, "sunset": sunset}
