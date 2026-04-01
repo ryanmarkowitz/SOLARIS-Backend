@@ -8,22 +8,24 @@ from core.config import settings
 clerk = Clerk(bearer_auth=settings.CLERK_SECRET_KEY)
 
 async def get_current_user(request: Request):
-    # convert FastAPI request to httpx request
-    # Clerk needs the headers of the packet to get the authorization token
     httpx_request = httpx.Request(
         method=request.method,
         url=str(request.url),
         headers=dict(request.headers),
     )
-    # verify token with clerk
+
+    print("AUTH HEADER:", request.headers.get("authorization"))
+    
     request_state = clerk.authenticate_request(
         httpx_request,
-        AuthenticateRequestOptions(
-            authorized_parties=[settings.AUTHORIZED_PARTY]
-        ),
+        AuthenticateRequestOptions(),
     )
-    # raise 401 if invalid
+
+    print("IS SIGNED IN:", request_state.is_signed_in)
+    print("REASON:", request_state.reason)
+    print("MESSAGE:", request_state.message)
+
     if not request_state.is_signed_in:
         raise HTTPException(status_code=401, detail="Invalid authentication")
-    # return payload if valid
+
     return request_state.payload

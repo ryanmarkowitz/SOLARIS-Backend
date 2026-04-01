@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends,HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.database import get_db
 from core.auth import get_current_user
@@ -22,6 +22,7 @@ router = APIRouter()
 # }
 @router.get("/test")
 async def get_test_telemetry():
+    print("\nSuccess\n")
     return TEST_TELEMETRY
 
 
@@ -34,6 +35,7 @@ async def get_telemetry(
     try:
         return await getTelemetryJson(db, user_id)
     except Exception as e:
+        print("getTelemetryJson error:", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
