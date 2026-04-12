@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from core.auth import get_current_user
 import openmeteo_requests
 import requests_cache
@@ -20,11 +20,11 @@ router = APIRouter()
 #   "sunrise": 1743826800,                   (unix timestamp)
 #   "sunset":  1743873600                    (unix timestamp)
 # }
-# TODO: add user authentication later after testing before deployment
 @router.get("")
 async def get_weather(
     long: float,
-    lat: float
+    lat: float,
+    _user=Depends(get_current_user)
 ):
     # Setup the Open-Meteo API client with cache and retry on error
     cache_session = requests_cache.CachedSession('.cache', expire_after = 3600)

@@ -8,8 +8,6 @@ class Telemetry(Base):
     dateTime = Column(DateTime, primary_key=True)
     battery_level = Column(SmallInteger)
     cpu_temp = Column(SmallInteger)
-    battery_temp = Column(SmallInteger)
     distance_traveled = Column(SmallInteger)
-    solar_power = Column(SmallInteger)
-    power_consumption = Column(SmallInteger)
+    net_power = Column(SmallInteger)
 
