@@ -52,5 +52,6 @@ async def post_telemetry(
     try:
         await postTelemetry(db, user_id, payload)
     except Exception as e:
+        print("POST /telemetry error:", repr(e))
         raise HTTPException(status_code=500, detail=str(e))
     return {"message": "Telemetry recorded"}

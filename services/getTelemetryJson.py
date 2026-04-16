@@ -1,12 +1,13 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from models.telemetry import Telemetry
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
+_EPOCH = datetime(2000, 1, 1)
 
 async def getTelemetryJson(db: AsyncSession, user_id: str):
     jsonDic = {}
 
-    now = datetime.now(timezone.utc)
+    now = datetime.utcnow()
 
     # Query all telemetry for the user, most recent first
     result = await db.execute(
@@ -29,15 +30,11 @@ def _bucket_average(rows, field: str, bucket_minutes: int):
     if not rows:
         return []
     buckets = {}
+    bucket_seconds = bucket_minutes * 60
     for row in rows:
         dt = row.dateTime
-        if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=timezone.utc)
-        bucket_key = dt.replace(
-            minute=(dt.minute // bucket_minutes) * bucket_minutes,
-            second=0,
-            microsecond=0
-        )
+        elapsed = (dt - _EPOCH).total_seconds()
+        bucket_key = _EPOCH + timedelta(seconds=(elapsed // bucket_seconds) * bucket_seconds)
         buckets.setdefault(bucket_key, []).append(getattr(row, field))
     return [
         {"dateTime": (bucket_key + timedelta(minutes=bucket_minutes)).isoformat(), "value": sum(vals) / len(vals)}

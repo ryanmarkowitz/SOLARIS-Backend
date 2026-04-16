@@ -60,8 +60,8 @@ async def get_weather(
 
         # get sunrise / sunset times
         daily = response.Daily()
-        sunrise = int(daily.Variables(0).ValuesAsNumpy()[0])
-        sunset = int(daily.Variables(1).ValuesAsNumpy()[0]) 
+        sunrise = int(daily.Variables(0).ValuesInt64AsNumpy()[0])
+        sunset = int(daily.Variables(1).ValuesInt64AsNumpy()[0])
 
         forecast = []
         for i in range(24):
