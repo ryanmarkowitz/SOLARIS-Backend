@@ -37,7 +37,7 @@ def _bucket_average(rows, field: str, bucket_minutes: int):
         bucket_key = _EPOCH + timedelta(seconds=(elapsed // bucket_seconds) * bucket_seconds)
         buckets.setdefault(bucket_key, []).append(getattr(row, field))
     return [
-        {"dateTime": (bucket_key + timedelta(minutes=bucket_minutes)).isoformat(), "value": sum(vals) / len(vals)}
+        {"dateTime": (bucket_key + timedelta(minutes=bucket_minutes)).isoformat() + "Z", "value": sum(vals) / len(vals)}
         for bucket_key, vals in sorted(buckets.items())
     ]
 
