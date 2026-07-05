@@ -16,7 +16,7 @@ async def get_current_user(request: Request):
 
     print("AUTH HEADER:", request.headers.get("authorization"))
     
-    request_state = clerk.authenticate_request(
+    request_state = await clerk.authenticate_request_async(
         httpx_request,
         AuthenticateRequestOptions(),
     )
