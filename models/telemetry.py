@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime,String, SmallInteger, ForeignKey
+from sqlalchemy import Column, DateTime,String, SmallInteger, Float, ForeignKey
 from core.database import Base
 
 class Telemetry(Base):
@@ -8,6 +8,6 @@ class Telemetry(Base):
     dateTime = Column(DateTime, primary_key=True)
     battery_level = Column(SmallInteger)
     cpu_temp = Column(SmallInteger)
-    distance_traveled = Column(SmallInteger)
+    distance_traveled = Column(Float)
     net_power = Column(SmallInteger)
 

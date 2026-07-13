@@ -39,7 +39,7 @@ async def get_telemetry(
 # POST /telemetry
 # Expects a list:
 # [
-#   { "timestamp": 1743811200, "battery_percent": 85, "cpu_temp": 72, "distance_m": 142, "net_power_gain_w": 12 },
+#   { "timestamp": 1743811200, "battery_percent": 85, "cpu_temp": 72, "distance_m": 142.3, "net_power_gain_w": 12 },
 #   ...
 # ]
 @router.post("", status_code=201)
