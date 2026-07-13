@@ -46,7 +46,7 @@ def getBatteryLevel(rows: list, now: datetime):
     # Returns current battery level and list of 1-hour bucket averages for past 24 hours
     one_day_ago = now - timedelta(hours=24)
 
-    past_day_rows = [r for r in rows if r.dateTime >= one_day_ago]
+    past_day_rows = [r for r in rows if one_day_ago <= r.dateTime <= now]
 
     return {
         "current": rows[0].battery_level if rows else None,
@@ -60,8 +60,8 @@ def getCpuTemp(rows: list, now: datetime):
     one_hour_ago = now - timedelta(hours=1)
     one_day_ago = now - timedelta(hours=24)
 
-    past_hour_rows = [r for r in rows if r.dateTime >= one_hour_ago]
-    past_day_rows = [r for r in rows if r.dateTime >= one_day_ago]
+    past_hour_rows = [r for r in rows if one_hour_ago <= r.dateTime <= now]
+    past_day_rows = [r for r in rows if one_day_ago <= r.dateTime <= now]
 
     return {
         "current": rows[0].cpu_temp if rows else None,
@@ -78,10 +78,10 @@ def getDistanceTraveled(rows: list, now: datetime):
     one_month_ago = now - timedelta(days=30)
 
     return {
-        "pastHour": sum(r.distance_traveled for r in rows if r.dateTime >= one_hour_ago),
-        "pastDay": sum(r.distance_traveled for r in rows if r.dateTime >= one_day_ago),
-        "pastWeek": sum(r.distance_traveled for r in rows if r.dateTime >= one_week_ago),
-        "pastMonth": sum(r.distance_traveled for r in rows if r.dateTime >= one_month_ago),
+        "pastHour": sum(r.distance_traveled for r in rows if one_hour_ago <= r.dateTime <= now),
+        "pastDay": sum(r.distance_traveled for r in rows if one_day_ago <= r.dateTime <= now),
+        "pastWeek": sum(r.distance_traveled for r in rows if one_week_ago <= r.dateTime <= now),
+        "pastMonth": sum(r.distance_traveled for r in rows if one_month_ago <= r.dateTime <= now),
         "allTime": sum(r.distance_traveled for r in rows),
     }
 
@@ -92,9 +92,9 @@ def getNetPower(rows: list, now: datetime):
     one_day_ago = now - timedelta(hours=24)
     one_week_ago = now - timedelta(weeks=1)
 
-    past_hour_rows = [r for r in rows if r.dateTime >= one_hour_ago]
-    past_day_rows = [r for r in rows if r.dateTime >= one_day_ago]
-    past_week_rows = [r for r in rows if r.dateTime >= one_week_ago]
+    past_hour_rows = [r for r in rows if one_hour_ago <= r.dateTime <= now]
+    past_day_rows = [r for r in rows if one_day_ago <= r.dateTime <= now]
+    past_week_rows = [r for r in rows if one_week_ago <= r.dateTime <= now]
 
     all_time_avg = sum(r.net_power for r in rows) / len(rows) if rows else None
 
