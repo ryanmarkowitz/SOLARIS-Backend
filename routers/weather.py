@@ -20,6 +20,7 @@ router = APIRouter()
 #   "sunrise": 1743826800,                   (unix timestamp)
 #   "sunset":  1743873600                    (unix timestamp)
 # }
+
 @router.get("")
 async def get_weather(
     long: float,
